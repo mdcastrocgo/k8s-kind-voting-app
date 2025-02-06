@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: python-otel-cronjob
+spec:
+  # Run the job every 3 minutes
+  schedule: "*/3 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: python-otel-job
+              image: mdcastrocgo/python-otel-app:latest
+              env:
+                # Use localhost for the OTLP endpoint
+                - name: OTEL_EXPORTER_OTLP_ENDPOINT
+                  value: "http://localhost:4317"
+          restartPolicy: OnFailure
+
